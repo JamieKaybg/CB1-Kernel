@@ -338,6 +338,15 @@
 	};
 };
 
+
+&pio {
+    can0_pin_irq: can0_pin_irq {
+        pins = "PC9";
+        function = "irq";
+        bias-pull-up;
+    };
+};
+
 &spi1 {
     #address-cells = <1>;
     #size-cells = <0>;
@@ -353,12 +362,13 @@
         compatible = "microchip,mcp2515";
         clocks = <&mcp2515_clock>;
         status = "disabled";
-        
-        reg = <0x0>;
-        spi-max-frequency = <5000000>;
 
+        reg = <0x0>;
+        spi-max-frequency = <12500000>;
+        pinctrl-names = "default";
+        pinctrl-0 = <&can0_pin_irq>;
         interrupt-parent = <&pio>;
-        interrupts = <2 9 IRQ_TYPE_EDGE_FALLING>;   /* PC9 */
+        interrupts = <2 9 0x08>; /* PC9 IRQ_TYPE_LEVEL_LOW */
         
         vdd-supply = <&reg_vcc33_wifi>;
         xceiver-supply = <&reg_vcc33_wifi>;
